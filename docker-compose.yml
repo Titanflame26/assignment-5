@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  fastapi:
+    build: .
+    container_name: fastapi-ollama
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+      OLLAMA_HOST: ${OLLAMA_HOST}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
